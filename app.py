@@ -4,6 +4,7 @@ import openai
 import uvicorn
 from pydantic import BaseModel
 import os
+from typing import List
 
 # Set the OpenAI API key
 openai.api_key = 'pk-**********************************************' # set this as it is, don't replace with your key
@@ -17,7 +18,7 @@ app = fastapi.FastAPI()
 # Define a request model for chat completion
 class ChatRequest(BaseModel):
     # The chat history as a list of strings
-    history: list[str]
+    history: List[str]
     # The partial message to be completed as a string
     partial: str
 
