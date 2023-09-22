@@ -5,6 +5,7 @@ import uvicorn
 from pydantic import BaseModel
 import os
 from typing import List
+from fastapi.middleware.cors import CORSMiddleware
 
 # Set the OpenAI API key
 openai.api_key = 'pk-**********************************************' # set this as it is, don't replace with your key
@@ -14,6 +15,18 @@ openai.api_base = f'https://proxy.ainorthstar.tech/{api_key}/v1'
 
 # Create a FastAPI app
 app = fastapi.FastAPI()
+
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # Define a request model for chat completion
 class ChatRequest(BaseModel):
@@ -29,7 +42,7 @@ class ChatRequest(BaseModel):
 
 # Define an endpoint for chat completion using gpt-3.5-turbo model
 @app.post("/chat")
-def chat(request: ChatRequest):
+async def chat(request: ChatRequest):
     system = "you are Chacha Chaudhary and you only explain/ answer related to namami ganges project"
     system_msg = [{"role": "system", "content": system}]
     user_assistant_msgs = [
